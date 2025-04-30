@@ -138,16 +138,8 @@ def wait_for_position_estimator(scf):
             ):
                 break
 
-def log_stab_callback(timestamp, data, logconf):
-    return data["kalman.stateZ"]
 
-def simple_log_async(scf, logconf):
-    cf = scf.cf
-    cf.log.add_config(logconf)
-    logconf.data_received_cb.add_callback(log_stab_callback)
-    logconf.start()
-    time.sleep(5)
-    logconf.stop()
+
 
 class DroneController:
     """Handles drone control and logging"""
@@ -159,6 +151,7 @@ class DroneController:
         self.z_target = 0.0
         self.log_config = LogConfig(name="Altitude", period_in_ms=10)
         self.log_config.add_variable("kalman.stateZ", "float")
+        
 
     def find_crazyflies(self) -> None:
         print("Scanning interfaces for Crazyflies...")
